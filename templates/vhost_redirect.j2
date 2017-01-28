@@ -1,0 +1,6 @@
+server {
+  listen 80;
+  server_name {{ static_site_site }} {{ static_site_site_aliases|join(' ') }};
+
+  rewrite ^ {{ 'https' if static_site_enable_https == True else '$scheme' }}://{{  static_site_site }}$request_uri? permanent;
+}

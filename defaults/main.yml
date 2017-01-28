@@ -1,0 +1,19 @@
+---
+static_site_shortname: netsign
+static_site_user: "{{ static_site_shortname }}"
+static_site_group: "{{ static_site_shortname }}"
+
+static_site_deployer_keys: []
+
+static_site_site: "{{ static_site_shortname }}.com"
+static_site_site_aliases:
+  - "www.{{ static_site_site }}"
+static_site_enable_https: no
+
+static_site_base_dir: /home/{{ static_site_shortname }}/{{ static_site_site}}
+static_site_dir: "{{ static_site_base_dir }}/public_html"
+
+static_site_ssl_cert: /etc/letsencrypt/live/{{ static_site_site }}/fullchain.pem
+static_site_ssl_cert_key: /etc/letsencrypt/live/{{ static_site_site }}/privkey.pem
+
+static_site_vhost_custom: ''

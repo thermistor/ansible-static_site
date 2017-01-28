@@ -1,0 +1,52 @@
+---
+
+- name: Add user for static site
+  user: name={{ static_site_user }} shell=/bin/bash
+
+- name: Set password for static site user if present
+  user: name={{ static_site_user }} password={{ static_site_password }}
+  when: static_site_password is defined
+
+- name: Install the authorized keys for static site deployers
+  authorized_key:
+    user: "{{ static_site_user }}"
+    key: "{{ item }}"
+  with_items: "{{ static_site_deployer_keys }}"
+  tags:
+    - security
+
+- name: Ensure the base website directory exists
+  file: path={{ static_site_base_dir }} state=directory owner={{ static_site_user }} group={{ static_site_group }} mode=0755
+
+# - name: Create public_html directory
+
+- name: Install the vhost for static site
+  template: src=vhost.j2
+            dest=/etc/nginx/sites-available/{{ static_site_site }}
+            mode=0644
+  notify:
+    - reload nginx
+
+- name: Enable the static site virtual host
+  file: path=/etc/nginx/sites-enabled/{{ static_site_site }}
+        src=/etc/nginx/sites-available/{{ static_site_site }}
+        state=link
+  notify:
+    - reload nginx
+
+- name: Install the vhost redirect(s) for {{ static_site_site }}
+  template: src=vhost_redirect.j2
+            dest=/etc/nginx/sites-available/{{ static_site_site }}_redirect
+            mode=0644
+  when: static_site_enable_https
+  notify:
+    - reload nginx
+
+- name: Enable the {{ static_site_shortname }} virtual host redirects
+  file: path=/etc/nginx/sites-enabled/{{ static_site_site }}_redirect
+        src=/etc/nginx/sites-available/{{ static_site_site }}_redirect
+        state=link
+  when: static_site_enable_https
+  notify:
+    - reload nginx
+
