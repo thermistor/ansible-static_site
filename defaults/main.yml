@@ -5,12 +5,14 @@ static_site_group: "{{ static_site_shortname }}"
 
 static_site_deployer_keys: []
 
-static_site_site: "{{ static_site_shortname }}.com"
+static_site_production_site: "{{ static_site_shortname }}.com"
+static_site_site: "{{ static_site_production_site if env == 'production' else (env ~ '.' ~ static_site_production_site) }}"
 static_site_site_aliases:
   - "www.{{ static_site_site }}"
+
 static_site_enable_https: no
 
-static_site_base_dir: /home/{{ static_site_shortname }}/{{ static_site_site}}
+static_site_base_dir: /home/{{ static_site_shortname }}/{{ static_site_production_site}}
 static_site_dir: "{{ static_site_base_dir }}/public_html"
 
 static_site_ssl_cert: /etc/letsencrypt/live/{{ static_site_site }}/fullchain.pem
