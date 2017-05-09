@@ -44,6 +44,12 @@ server {
 
   index index.html;
 
+  # allow letsencrypt renewal script to work
+  location ~ /\.well-known {
+    allow all;
+    break;
+  }
+
   # Deny all attempts to access hidden files such as .htaccess, .htpasswd, .DS_Store (Mac).
   # Keep logging the requests to parse later (or to pass to firewall utilities such as fail2ban)
   location ~ /\. {
