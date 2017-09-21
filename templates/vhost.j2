@@ -44,6 +44,8 @@ server {
 
   index index.html;
 
+  error_page 404 /404/index.html;
+
   # allow letsencrypt renewal script to work
   location ~ /\.well-known {
     allow all;
