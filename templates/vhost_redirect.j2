@@ -4,5 +4,13 @@ server {
 
   server_name {{ static_site_site }} {{ static_site_site_aliases|join(' ') }};
 
+  # allow letsencrypt renewal script to work
+  location /.well-known/acme-challenge/ {
+    allow all;
+    access_log /var/log/nginx/{{ static_site_shortname }}-acme-access.log;
+    error_log /var/log/nginx/{{ static_site_shortname }}-acme-error.log;
+    break;
+  }
+
   rewrite ^ {{ 'https' if static_site_enable_https == True else '$scheme' }}://{{  static_site_site }}$request_uri? permanent;
 }
