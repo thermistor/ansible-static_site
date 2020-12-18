@@ -1,3 +1,4 @@
+#jinja2: trim_blocks: False
 server {
 
 {% if static_site_enable_https %}
@@ -24,20 +25,22 @@ server {
   resolver 1.1.1.1 1.0.0.1 valid=300s;
   resolver_timeout 5s;
 
-  add_header Strict-Transport-Security "max-age=31536000";
-
+  {% if static_site_enable_canonical_redirect %}
   if ( $host != '{{ static_site_site }}' ) {
    rewrite ^ https://{{ static_site_site }}$request_uri? permanent;
   }
+  {% endif %}
 {% else %}
   listen 80;
   listen [::]:80;
 
   server_name {{ static_site_site }} {{ static_site_site_aliases|join(' ') }};
 
+  {% if static_site_enable_canonical_redirect %}
   if ( $host != '{{ static_site_site }}' ) {
    rewrite ^ http://{{ static_site_site }}$request_uri? permanent;
   }
+  {% endif %}
 {% endif %}
 
   root {{ static_site_dir }};

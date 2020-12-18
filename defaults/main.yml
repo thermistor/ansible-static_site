@@ -11,6 +11,7 @@ static_site_site_aliases:
   - "www.{{ static_site_site }}"
 
 static_site_enable_https: no
+static_site_enable_canonical_redirect: yes
 
 static_site_base_dir: /home/{{ static_site_shortname }}/{{ static_site_production_site}}
 static_site_dir: "{{ static_site_base_dir }}/public_html"
