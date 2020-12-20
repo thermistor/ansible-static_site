@@ -16,7 +16,8 @@ static_site_enable_canonical_redirect: yes
 static_site_base_dir: /home/{{ static_site_shortname }}/{{ static_site_production_site}}
 static_site_dir: "{{ static_site_base_dir }}/public_html"
 
-static_site_ssl_cert: /etc/letsencrypt/live/{{ static_site_site }}/fullchain.pem
-static_site_ssl_cert_key: /etc/letsencrypt/live/{{ static_site_site }}/privkey.pem
+static_site_ssl_cert: /etc/nginx/certs/{{ static_site_site }}.cer
+static_site_ssl_cert_key: /etc/nginx/private/{{ static_site_site }}.key
+static_site_ssl_cert_ca: /etc/nginx/certs/ca.cer
 
 static_site_vhost_custom: ''
