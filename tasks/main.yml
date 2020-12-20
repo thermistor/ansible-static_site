@@ -2,6 +2,7 @@
 
 - name: Add user for static site
   user: name={{ static_site_user }} shell=/bin/bash
+  when: static_site_create_user
 
 - name: Set password for static site user if present
   user: name={{ static_site_user }} password={{ static_site_password }}
@@ -12,11 +13,17 @@
     user: "{{ static_site_user }}"
     key: "{{ item }}"
   with_items: "{{ static_site_deployer_keys }}"
+  when: static_site_install_keys
   tags:
     - security
 
 - name: Ensure the base website directory exists
-  file: path={{ static_site_base_dir }} state=directory owner={{ static_site_user }} group={{ static_site_group }} mode=0755
+  file:
+    path: "{{ static_site_base_dir }}"
+    state: directory
+    owner: "{{ static_site_user }}"
+    group: "{{ static_site_group }}"
+    mode: 0755
 
 # - name: Create public_html directory
 

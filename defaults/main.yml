@@ -2,8 +2,10 @@
 static_site_shortname: netsign
 static_site_user: "{{ static_site_shortname }}"
 static_site_group: "{{ static_site_shortname }}"
+static_site_create_user: yes
 
 static_site_deployer_keys: []
+static_site_install_keys: yes
 
 static_site_production_site: "{{ static_site_shortname }}.com"
 static_site_site: "{{ static_site_production_site if env == 'production' else (env ~ '.' ~ static_site_production_site) }}"
